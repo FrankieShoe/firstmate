@@ -1,0 +1,23 @@
+==================================================================
+SCENARIO 1  no-mistakes ship, committed, NO pr= recorded
+  a worker committed and stopped for /no-mistakes; nothing shipped
+==================================================================
+meta:   kind=ship mode=no-mistakes 
+status: done: implemented the fix, ready for /no-mistakes
+-> state: working · source: status-log · implemented the fix, ready for /no-mistakes · committed only: no PR recorded, no-mistakes validation owed
+
+==================================================================
+SCENARIO 2  no-mistakes ship, PR recorded (pr=) -> terminal again
+==================================================================
+meta:   kind=ship mode=no-mistakes pr=https://github.com/o/r/pull/5 
+status: done: PR https://github.com/o/r/pull/5 checks green
+-> state: done · source: status-log · PR https://github.com/o/r/pull/5 checks green
+
+==================================================================
+SCENARIO 3  direct-PR ship done (gate is scoped to no-mistakes)
+==================================================================
+meta:   kind=ship mode=direct-PR 
+status: done: PR https://github.com/o/r/pull/6
+-> state: done · source: status-log · PR https://github.com/o/r/pull/6
+
+done.
