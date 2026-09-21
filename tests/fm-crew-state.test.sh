@@ -2044,7 +2044,13 @@ test_merged_pr_reads_done_under_captured_meta() {
   pass "recorded merged PR reads done under the fleet snapshot's captured meta"
 }
 
-test_no_mistakes_prevalidation_done_stays_done() {
+# A no-mistakes ship pauses at commit by design: it appends `done: <summary>` the
+# moment it commits and stops for firstmate to start validation. With no matching
+# run, no shipment claim, and no pr= recorded, that pre-validation `done` is neither
+# terminal nor a fault - it reads working (mid-pipeline, nothing owed), distinct from
+# the named-head reachability refusal that a shipment claim with an unpushed head
+# gets (blocked). fm_dod_ship_committed_only owns the distinction.
+test_no_mistakes_prevalidation_done_reads_working() {
   reset_fakes
   local d out
   d=$(new_case preval-done)
@@ -2060,9 +2066,12 @@ test_no_mistakes_prevalidation_done_stays_done() {
   FM_FAKE_BUSY=0
   arm_idle_record "$d/state" preval
   out=$(run_crew_state "$d" preval)
-  assert_contains "$out" "state: done" "no-mistakes pre-validation done: remains done"
+  assert_contains "$out" "state: working" "no-mistakes pre-validation done: reads working, not terminal"
+  assert_contains "$out" "source: status-log" "the verdict still comes from the status log"
+  assert_contains "$out" "committed only: no PR recorded" "the detail names why it is not terminal"
+  assert_not_contains "$out" "state: done" "pre-validation done: must not read as shipped"
   assert_not_contains "$out" "state: blocked" "pre-validation done: must not be the named-head gate"
-  pass "no-mistakes pre-validation done: stays current-state done"
+  pass "no-mistakes pre-validation done: reads current-state working"
 }
 
 test_moved_remote_branch_without_named_head_is_blocked() {
@@ -5207,7 +5216,7 @@ test_coarse_run_does_not_probe_other_branch_ci_log_for_ready_status
 test_other_branch_run_ignored
 test_unpushed_ship_done_is_blocked
 test_merged_pr_reads_done_under_captured_meta
-test_no_mistakes_prevalidation_done_stays_done
+test_no_mistakes_prevalidation_done_reads_working
 test_moved_remote_branch_without_named_head_is_blocked
 test_no_run_busy_pane
 test_no_run_launch_prompt_parked_is_not_working
