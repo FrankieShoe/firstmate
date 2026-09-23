@@ -1970,7 +1970,8 @@ test_other_branch_run_ignored() {
   local d; d=$(new_case otherbranch)
   make_repo_on_branch "$d/wt" fm/feat-g
   make_fakebin "$d" >/dev/null
-  fm_write_meta "$d/state/feat-g.meta" "window=fm:fm-feat-g" "worktree=$d/wt" "kind=ship" "harness=claude"
+  fm_write_meta "$d/state/feat-g.meta" "window=fm:fm-feat-g" "worktree=$d/wt" \
+    "kind=ship" "harness=claude" "pr=https://github.com/o/r/pull/3"
   printf 'done: implemented, ready to validate\n' > "$d/state/feat-g.status"
   FM_FAKE_AXI_STATUS="$(run_running fm/some-other)"
   FM_FAKE_RUNS_LIST="$(cat <<'EOF'
@@ -2072,6 +2073,33 @@ test_no_mistakes_prevalidation_done_reads_working() {
   assert_not_contains "$out" "state: done" "pre-validation done: must not read as shipped"
   assert_not_contains "$out" "state: blocked" "pre-validation done: must not be the named-head gate"
   pass "no-mistakes pre-validation done: reads current-state working"
+}
+
+# Empty mode is the unregistered-project default and fm_dod_should_gate_ship_done
+# treats it as no-mistakes; fm_dod_ship_committed_only must agree, so an
+# unregistered-project ship that pauses at commit (empty mode, no shipment claim,
+# no pr= recorded) reads working, never terminal done.
+test_empty_mode_prevalidation_done_reads_working() {
+  reset_fakes
+  local d out
+  d=$(new_case preval-done-empty-mode)
+  make_repo_on_branch "$d/wt" fm/preval-empty
+  git -C "$d/wt" commit -q --allow-empty -m 'fix only in the worktree'
+  make_fakebin "$d" >/dev/null
+  fm_write_meta "$d/state/preval.meta" \
+    "window=fm:fm-preval" "worktree=$d/wt" "project=$d/wt" \
+    "kind=ship" "harness=claude"
+  printf 'done: implementation complete\n' > "$d/state/preval.status"
+  FM_FAKE_AXI_STATUS=""
+  FM_FAKE_RUNS_LIST=""
+  FM_FAKE_BUSY=0
+  arm_idle_record "$d/state" preval
+  out=$(run_crew_state "$d" preval)
+  assert_contains "$out" "state: working" "empty-mode pre-validation done: reads working, not terminal"
+  assert_contains "$out" "committed only: no PR recorded" "the detail names why it is not terminal"
+  assert_not_contains "$out" "state: done" "empty-mode pre-validation done: must not read as shipped"
+  assert_not_contains "$out" "state: blocked" "empty-mode pre-validation done: must not be the named-head gate"
+  pass "empty-mode pre-validation done: reads current-state working"
 }
 
 test_moved_remote_branch_without_named_head_is_blocked() {
@@ -2519,7 +2547,12 @@ test_single_owner_terminal_declaration_supersedes_stale_decision() {
   make_fakebin "$d" >/dev/null
   arm_idle_record "$d/state" task
   for kind in scout ship; do
-    fm_write_meta "$d/state/task.meta" "window=fm:fm-task" "worktree=$d/wt" "kind=$kind" "harness=claude"
+    if [ "$kind" = ship ]; then
+      fm_write_meta "$d/state/task.meta" "window=fm:fm-task" "worktree=$d/wt" \
+        "kind=$kind" "harness=claude" "pr=https://github.com/o/r/pull/3"
+    else
+      fm_write_meta "$d/state/task.meta" "window=fm:fm-task" "worktree=$d/wt" "kind=$kind" "harness=claude"
+    fi
     for opener in needs-decision blocked; do
       for terminal in 'done' failed; do
         printf '%s [key=choice]: an earlier decision\n%s: final outcome\nContinuation prose.\n\n' \
@@ -5217,6 +5250,7 @@ test_other_branch_run_ignored
 test_unpushed_ship_done_is_blocked
 test_merged_pr_reads_done_under_captured_meta
 test_no_mistakes_prevalidation_done_reads_working
+test_empty_mode_prevalidation_done_reads_working
 test_moved_remote_branch_without_named_head_is_blocked
 test_no_run_busy_pane
 test_no_run_launch_prompt_parked_is_not_working

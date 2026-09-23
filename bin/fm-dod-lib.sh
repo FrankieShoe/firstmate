@@ -384,10 +384,11 @@ fm_dod_should_gate_ship_done() {  # <kind> <mode> <line>
 # reads it as working (mid-pipeline), never as terminal done or as a blocked fault.
 # This is the deliberate counterpart to the named-head reachability refusal, which
 # fires on a shipment claim whose head is unverifiable and stays blocked.
+# Empty mode is treated as no-mistakes, the unregistered-project default.
 fm_dod_ship_committed_only() {  # <kind> <mode> <line> <meta>
   local kind=$1 mode=$2 line=$3 meta=${4:-}
   [ "$kind" = ship ] || return 1
-  [ "$mode" = no-mistakes ] || return 1
+  case "$mode" in no-mistakes|'') ;; *) return 1 ;; esac
   [ "$(status_line_verb "$line")" = "done" ] || return 1
   fm_dod_note_reports_ci_ready "$(status_line_note "$line")" && return 1
   ! fm_pr_metadata_identity_parse "$meta"
