@@ -1,0 +1,47 @@
+Live validation: wedge detection defers to a running/fixing no-mistakes validation run
+Branch: fm/wedge-detection-ignores-running-pipeline-dna-9999
+Base 3d14792 -> Target 4c521c1
+
+HOW DRIVEN
+Each scenario drives the REAL watcher product: bin/fm-watch.sh is launched as a
+background subprocess (via the test harness's wedge_threshold_round / watch_bg),
+polling a fixture home. The watcher reads authoritative crew state through its own
+$FM_CREW_STATE_BIN indirection - the exact seam it uses in production - with a fake
+fm-crew-state.sh returning the canned `state: ... source: run-step · validating (...)`
+verdict per case. The watcher's real classification, deferral and wake-queue code
+runs unmodified; only the backend reader is injected.
+
+SCENARIO 1 - running/fixing validation run is deferred, not wedge-escalated (TARGET)
+$ FM_TEST_ONLY=test_wedge_threshold_defers_to_an_executing_validation_run bash tests/fm-watch-triage.test.sh
+=== test_wedge_threshold_defers_to_an_executing_validation_run ===
+ok - a running or fixing validation run is deferred on the long recheck cadence rather than wedge-escalated
+exit: 0
+  Asserts across three thresholds for both `running` and `fixing`: zero stale wakes
+  queued, no "possible wedge" wording emitted, no .wedge-escalations counter file,
+  and .validating-since-<key> bound to run id 01RUNLIVE. Then: an aged run re-surfaces
+  ONCE on the long cadence worded as the validating run it is; a replacement run id
+  rebinds the deferral chain.
+
+SCENARIO 2 - every non-executing run state keeps the unchanged wedge ladder (FORBIDDEN over-suppression)
+$ FM_TEST_ONLY=test_wedge_threshold_escalates_when_no_run_is_executing bash tests/fm-watch-triage.test.sh
+=== test_wedge_threshold_escalates_when_no_run_is_executing ===
+ok - parked, terminal, ci-monitoring, coarse, runless, absent and unreadable runs keep the unchanged wedge ladder
+exit: 0
+  Drives parked / failed / done / ci-running / coarse background-run / runless /
+  agent-absent / unreadable verdicts: each escalates through escalations 1,2,3 with the
+  demand-deep-inspection wording, and NONE starts a validating deferral chain.
+
+SCENARIO 3 - unarmed parked-gate probe read accounting unchanged by the new consult
+$ FM_TEST_ONLY=test_wedge_threshold_parked_gate_is_off_until_armed bash tests/fm-watch-triage.test.sh
+=== test_wedge_threshold_parked_gate_is_off_until_armed ===
+ok - with config/wedge-defer-parked-gate absent a parked gate keeps the unchanged ladder, wording and reads
+exit: 0
+
+REGRESSION PROOF (red -> green)
+With bin/fm-watch.sh and bin/fm-classify-lib.sh reverted to base 3d14792 (test file kept at target):
+$ FM_TEST_ONLY=test_wedge_threshold_defers_to_an_executing_validation_run bash tests/fm-watch-triage.test.sh
+not ok - a running validation run wedge-escalated at threshold 1: stale: test:fm-wedge (idle 1s, possible wedge, escalation 1)
+exit: 1
+  => The pre-fix watcher reproduces the EXACT reported bug: it raises
+     "possible wedge, escalation 1" for a worker whose validation run is running.
+     The fix turns this red to green. bin files restored to target afterward; tree clean.
