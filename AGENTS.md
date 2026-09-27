@@ -214,6 +214,7 @@ Drive a worker's lifecycle through `bin/fm-control.sh <task-id> interrupt|exit|r
 A secondmate's routed reply returns through status or a document pointer, not by firstmate peeking into its chat.
 For the parent-owned correlation, recovery, and escalation contract on marked secondmate requests, see `bin/fm-pending-reply-lib.sh`.
 When the captain adds or changes an ask mid-task, append the captain's words without added speaker labels or direct address to that brief's `## Captain's intent` and relay those words to the worker; Firstmate build constraints stay in `## Firstmate spec` or the steer.
+When a decision is changed or reversed while work is under way, run `bin/fm-supersede-sweep.sh` with phrases from the superseded statement before the next dispatch, then correct each brief or note it names and re-steer each live worker it names.
 Supervise all live work under section 8.
 
 ### Selected delivery path and merge authority
