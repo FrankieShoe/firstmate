@@ -2,8 +2,8 @@
 # Behavior tests for bin/fm-supersede-sweep.sh: after a decision changes, it
 # must name every open brief and not-done backlog title, note, or hold reason
 # that still states the superseded fact, skip finished work, report a clean
-# sweep only when nothing matches, and never report clean when the backlog
-# cannot be read.
+# sweep only when nothing matches, and never report clean when the backlog or
+# an open brief cannot be read.
 set -u
 
 # shellcheck source=tests/lib.sh disable=SC1091
@@ -88,6 +88,16 @@ test_any_phrase_matches_and_clean_is_reported() {
   pass "fm-supersede-sweep.sh matches any phrase and reports a clean sweep"
 }
 
+test_row_metadata_is_not_searched() {
+  local home
+  home=$(make_home metadata)
+  tasks "$home" add legacy-export-cleanup "Tidy the exporter" --repo legacy-export
+  sweep "$home" "legacy-export"
+  assert_equals 0 "$RC" "a phrase only in the id or repo must not be a hit"
+  assert_contains "$OUT" "clean:" "id and repo fields were searched"
+  pass "fm-supersede-sweep.sh searches only the title, note, and hold reason of a backlog row"
+}
+
 test_refuses_rather_than_reporting_clean() {
   local home
   home=$(make_home unreadable)
@@ -97,6 +107,18 @@ test_refuses_rather_than_reporting_clean() {
   assert_equals 2 "$RC" "an empty phrase must be refused"
   sweep "$home" "x" ""
   assert_equals 2 "$RC" "an empty later phrase must be refused"
+  tasks "$home" add q-1 "queued work"
+  mkdir -p "$home/data/q-1"
+  printf 'nothing stale\n' > "$home/data/q-1/brief.md"
+  chmod 000 "$home/data/q-1/brief.md"
+  if [ ! -r "$home/data/q-1/brief.md" ]; then
+    sweep "$home" "anything"
+    assert_equals 2 "$RC" "an unreadable open brief must not be reported clean"
+    assert_not_contains "$OUT" "clean:" "an unreadable open brief was reported clean"
+  else
+    echo "skip: running as a user who can read mode-000 files; unreadable-brief case not run"
+  fi
+  chmod 600 "$home/data/q-1/brief.md"
   ln -sf "$TMP_ROOT/elsewhere.md" "$home/data/backlog.md"
   sweep "$home" "anything"
   assert_equals 2 "$RC" "an unreadable backlog must not be reported clean"
@@ -107,6 +129,7 @@ test_refuses_rather_than_reporting_clean() {
 if command -v tasks-axi >/dev/null 2>&1; then
   test_names_every_open_copy_of_the_statement
   test_any_phrase_matches_and_clean_is_reported
+  test_row_metadata_is_not_searched
   test_refuses_rather_than_reporting_clean
 else
   echo "skip: tasks-axi not found; supersede-sweep cases not run"

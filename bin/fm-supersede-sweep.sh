@@ -16,7 +16,8 @@
 #     home (`state/<id>.meta`) or open in its backlog, including a brief
 #     already written for work not yet dispatched;
 #   - the title, note, and hold reason of every backlog item that is not done,
-#     read through bin/fm-tasks-axi.sh so any configured backend is covered.
+#     read through bin/fm-tasks-axi.sh so any configured backend is covered;
+#     the id, state, kind, and repo fields that lead each row are not searched.
 # It reads only; correcting a brief, re-steering a live worker, or updating a
 # note stays a deliberate act by the caller, and the printed help names how.
 #
@@ -26,8 +27,8 @@
 # followed by `hits: <n>` or `clean: ...`.
 #
 # Exit status: 0 when nothing matches, 1 when any hit needs correcting, 2 on a
-# usage error or when the backlog cannot be read, so an unreadable backlog is
-# never reported clean.
+# usage error or when the backlog or an open brief cannot be read, so an
+# incomplete sweep is never reported clean.
 set -u
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -81,10 +82,14 @@ while IFS= read -r id; do
   [ -n "$id" ] || continue
   brief="$DATA/$id/brief.md"
   [ -f "$brief" ] || continue
+  grep_rc=0
+  matches=$(grep -n -i -F "${patterns[@]}" -- "$brief") || grep_rc=$?
+  [ "$grep_rc" -le 1 ] || fail "cannot read $brief; the sweep is incomplete"
+  [ -n "$matches" ] || continue
   while IFS= read -r line; do
     printf 'brief: %s %s:%s\n' "$id" "$brief" "$line"
     hits=$((hits + 1))
-  done < <(grep -n -i -F "${patterns[@]}" -- "$brief" || true)
+  done <<< "$matches"
 done < <(printf '%s%s\n' "$live_ids" "$open_ids" | sort -u)
 
 while IFS= read -r row; do
@@ -92,7 +97,8 @@ while IFS= read -r row; do
   state=${row#*,}
   state=${state%%,*}
   [ "$state" != "done" ] || continue
-  printf '%s\n' "$row" | grep -q -i -F "${patterns[@]}" || continue
+  searched=${row#*,*,*,*,}
+  printf '%s\n' "$searched" | grep -q -i -F "${patterns[@]}" || continue
   printf 'note: %s %s: %s\n' "${row%%,*}" "$state" "$row"
   hits=$((hits + 1))
 done <<< "$rows"
