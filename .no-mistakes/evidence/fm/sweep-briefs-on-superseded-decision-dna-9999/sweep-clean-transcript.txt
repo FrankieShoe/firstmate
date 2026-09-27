@@ -1,0 +1,11 @@
+=== Superseded statement phrase: 'keep the export disabled' ===
+$ fm-supersede-sweep.sh 'keep the export disabled'
+brief: export-fix /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-sweep-clean.cz9nne/data/export-fix/brief.md:2:Keep the export disabled until further notice.
+hits: 1
+help: correct each brief before it is dispatched; relay the correction to a live worker with fm-send.sh; update each note with fm-tasks-axi.sh update <id> --title or --body-file
+(exit 1)
+
+=== Operator corrects the live brief, then resweeps ===
+$ fm-supersede-sweep.sh 'keep the export disabled'
+clean: no open brief or task note states the superseded statement
+(exit 0)

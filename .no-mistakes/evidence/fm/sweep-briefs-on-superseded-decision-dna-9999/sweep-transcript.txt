@@ -1,0 +1,26 @@
+=== Scenario: a 'fix now' reversal makes an in-flight brief stale ===
+
+--- LIVE worker briefed from the now-superseded statement ---
+--- QUEUED brief not yet dispatched, written from the same stale fact ---
+--- Queued task TITLE read as fact by a fresh session ---
+--- Finished work that must NOT be re-swept ---
+
+=== Decision reversed: 'fix now, re-enable the legacy export'. Sweep before next dispatch ===
+$ fm-supersede-sweep.sh 'legacy export'
+brief: export-fix /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-sweep-demo.oTPqZb/data/export-fix/brief.md:2:Keep the Legacy Export disabled until further notice.
+brief: export-followup /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-sweep-demo.oTPqZb/data/export-followup/brief.md:2:The legacy export stays off.
+note: export-fix in_flight: export-fix,in_flight,task,"-",Disable the legacy export,"","-"
+note: export-followup queued: export-followup,queued,task,"-",Document the legacy export,"","-"
+note: retire-legacy queued: retire-legacy,queued,task,"-",Retire the legacy export,"","-"
+hits: 5
+help: correct each brief before it is dispatched; relay the correction to a live worker with fm-send.sh; update each note with fm-tasks-axi.sh update <id> --title or --body-file
+(exit 1)
+
+=== After correcting each hit, the sweep reports clean ===
+$ fm-supersede-sweep.sh 'legacy export'
+brief: export-fix /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-sweep-demo.oTPqZb/data/export-fix/brief.md:2:Re-enable the legacy export immediately (fix now).
+note: export-fix in_flight: export-fix,in_flight,task,"-",Disable the legacy export,"","-"
+note: export-followup queued: export-followup,queued,task,"-",Document the legacy export,"","-"
+hits: 3
+help: correct each brief before it is dispatched; relay the correction to a live worker with fm-send.sh; update each note with fm-tasks-axi.sh update <id> --title or --body-file
+(exit 1)
