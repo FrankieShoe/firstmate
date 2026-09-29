@@ -4107,6 +4107,65 @@ test_archived_answered_hold_still_satisfies_the_gate() {
   pass "an answered captain call archived by Done retention still satisfies the completion gate"
 }
 
+# The archive location is not always beside the backlog: tasks-axi honours a
+# [markdown] archive set only in the user-level $HOME/.tasks-axi/config.toml, and
+# resolves a relative value against the backlog root. The completion gate must
+# resolve it the same way, or an answered call retention moved there reads as
+# absent and teardown is refused.
+test_archived_answer_in_a_user_configured_archive_satisfies_the_gate() {
+  local home axi_home archive id
+  home=$(make_home archived-answer-userconfig)
+  axi_home="$home/axi-home"
+  mkdir -p "$axi_home/.tasks-axi"
+  # Root config sets no archive, so the location comes only from the user config.
+  cat > "$home/.tasks.toml" <<'EOF'
+backend = "markdown"
+
+[markdown]
+path = "data/backlog.md"
+done_keep = 10
+EOF
+  cat > "$axi_home/.tasks-axi/config.toml" <<'EOF'
+[markdown]
+archive = "data/relocated-done-archive.md"
+EOF
+  archive="$home/data/relocated-done-archive.md"
+  id=sample-userconfig-review
+  mkdir -p "$home/data/$id"
+  HOME="$axi_home" tasks_in "$home" add "$id" "Investigate the user-config sample" --kind scout --repo sample --start >/dev/null \
+    || fail "could not create the user-config origin"
+  write_origin_meta "$home" "$id"
+  printf 'done: report complete\n' > "$home/state/$id.status"
+  printf '# User-config sample review\n\nOne captain choice remains.\n' > "$home/data/$id/report.md"
+  HOME="$axi_home" run_captain "$home" hold sample-userconfig-call --title "Choose the relocated option" \
+    --reason "captain relocated choice pending" --repo sample --origin "$id" >/dev/null \
+    || fail "could not register the captain-held task"
+  HOME="$axi_home" run_captain "$home" complete "$id" sample-userconfig-call >/dev/null \
+    || fail "completion failed before the answer"
+  printf 'Captain chose the relocated option.\n' > "$home/userconfig-decision.txt"
+  HOME="$axi_home" run_captain "$home" answer sample-userconfig-call --decision-file "$home/userconfig-decision.txt" >/dev/null \
+    || fail "answer could not close the captain-held task"
+
+  perl -0pi -e 's/done_keep = 10/done_keep = 0/' "$home/.tasks.toml"
+  HOME="$axi_home" tasks_in "$home" add sample-userconfig-trigger "Trigger Done retention" --kind ship --repo sample >/dev/null
+  HOME="$axi_home" tasks_in "$home" "done" sample-userconfig-trigger >/dev/null \
+    || fail "could not trigger Done retention"
+  assert_present "$archive" "Done retention did not write the user-configured archive"
+  assert_grep "sample-userconfig-call" "$archive" \
+    "Done retention did not archive the answered call to the user-configured location"
+  if HOME="$axi_home" tasks_in "$home" show sample-userconfig-call >/dev/null 2>&1; then
+    fail "the archived call is still shown from the live backlog, so the fixture reproduces nothing"
+  fi
+
+  HOME="$axi_home" run_captain "$home" verify "$id" >/dev/null 2> "$home/userconfig-verify.err" \
+    || fail "verify refused an answered call archived to the user-configured location: $(cat "$home/userconfig-verify.err")"
+  HOME="$axi_home" run_captain "$home" complete "$id" sample-userconfig-call >/dev/null 2> "$home/userconfig-complete.err" \
+    || fail "complete refused an answered call archived to the user-configured location: $(cat "$home/userconfig-complete.err")"
+  HOME="$axi_home" run_teardown "$home" "$id" >/dev/null 2> "$home/userconfig-teardown.err" \
+    || fail "teardown refused a scout whose answered call was archived to the user-configured location: $(cat "$home/userconfig-teardown.err")"
+  pass "an answered captain call archived to a user-configured location still satisfies the completion gate"
+}
+
 test_uninventoried_report_decision_refuses_completion
 test_hold_decodes_a_bare_scalar_body_without_the_nonref_default
 test_retained_body_keeps_its_utf8_bytes
@@ -4161,3 +4220,4 @@ test_verify_resolves_a_pre_collapse_key_through_its_derived_marker
 test_captain_hold_mutations_address_the_beads_backend
 test_hold_creates_a_captain_row_when_beads_requires_due_without_custom_type
 test_archived_answered_hold_still_satisfies_the_gate
+test_archived_answer_in_a_user_configured_archive_satisfies_the_gate

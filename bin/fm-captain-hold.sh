@@ -516,11 +516,14 @@ resolution_block() {  # <mode>
 # Durable state of one captain call: an active captain hold (annotations
 # surviving even when a date gate has expired) or a recorded captain answer.
 verify_hold_durable() {  # <task-id>
-  local id=$1 show state hold_kind body
+  local id=$1 show state hold_kind body archived_status
   task_show "$id" || {
     [ "$?" -ne 124 ] || fail "the backlog backend exceeded its read bound reading $id"
-    task_show_archived "$id" \
-      || fail "captain-held task $id is absent from this home's configured backlog (data directory $DATA)"
+    task_show_archived "$id" || {
+      archived_status=$?
+      [ "$archived_status" -ne 124 ] || exit 124
+      fail "captain-held task $id is absent from this home's configured backlog (data directory $DATA)"
+    }
   }
   show=$TASK_SHOW_OUTPUT
   state=$(show_field "$show" state)
@@ -811,6 +814,20 @@ write_hold_set_stamp() {  # <task-id> <shown-body> <timestamp> <preserve-existin
 # archived row is closed, so it can satisfy the gate solely through a recorded
 # resolution, and every mutating path keeps seeing it as absent.
 
+# The [markdown] archive key tasks-axi would honour, resolved with tasks-axi's
+# own source precedence: the backlog root's .tasks.toml first, then the
+# user-level $HOME/.tasks-axi/config.toml. Empty when neither sets it; a relative
+# value resolves against the backlog root wherever it was configured, the way
+# tasks-axi resolves it.
+captain_markdown_archive_setting() {  # <backlog-root>
+  local root=$1 archive
+  archive=$(captain_toml_section_entries "$root/.tasks.toml" markdown archive | sed -n 's/^archive //p' | head -1)
+  if [ -z "$archive" ] && [ -n "${HOME:-}" ]; then
+    archive=$(captain_toml_section_entries "$HOME/.tasks-axi/config.toml" markdown archive | sed -n 's/^archive //p' | head -1)
+  fi
+  printf '%s\n' "$archive"
+}
+
 # The archive tasks-axi writes: the [markdown] archive key resolved against the
 # backlog root, else done-archive.md beside the addressed backlog file. Returns
 # 1 when the configured backend keeps no markdown archive.
@@ -820,7 +837,7 @@ captain_markdown_archive_path() {
   root=$(fm_backlog_root "$data") || return 1
   backend=$(fm_tasks_axi_backend "$root" 2>/dev/null) || return 1
   [ "$backend" = markdown ] || return 1
-  archive=$(captain_toml_section_entries "$root/.tasks.toml" markdown archive | sed -n 's/^archive //p' | head -1)
+  archive=$(captain_markdown_archive_setting "$root")
   case "$archive" in
     '')
       file=$(fm_backlog_file "$data") || return 1
@@ -837,8 +854,10 @@ captain_markdown_archive_path() {
 # reused id can be archived more than once, and retention appends, so the last
 # block is the newest. Returns 1 when the row is not archived.
 task_show_archived() {  # <id>; sets TASK_SHOW_OUTPUT
-  local id=$1 archive dir status=0
+  local id=$1 archive dir status=0 secs=${FM_BACKLOG_ROW_TIMEOUT_SECS:-10}
   TASK_SHOW_OUTPUT=
+  case "$secs" in ''|*[!0-9]*) secs=10 ;; esac
+  [ "$secs" -gt 0 ] 2>/dev/null || secs=10
   archive=$(captain_markdown_archive_path) || return 1
   [ -f "$archive" ] || return 1
   dir=$(umask 077; mktemp -d "${TMPDIR:-/tmp}/fm-captain-hold-archive.XXXXXX") \
@@ -859,8 +878,19 @@ task_show_archived() {  # <id>; sets TASK_SHOW_OUTPUT
     ' "$archive"
   } > "$dir/backlog.md" || status=1
   if [ "$status" -eq 0 ]; then
-    TASK_SHOW_OUTPUT=$(cd "$dir" && tasks-axi show "$id" --full --file "$dir/backlog.md" 2>/dev/null) \
-      || status=1
+    # The replayed archive read gets the same bound as a live backlog read, so a
+    # wedged tasks-axi cannot hang verify, or complete while it holds the origin
+    # metadata lock. A bound hit is not absence, so it stops loudly with 124.
+    # shellcheck disable=SC2016  # Expansion is deliberately deferred to the child shell.
+    TASK_SHOW_OUTPUT=$(fm_run_timed "$secs" bash -c \
+      'cd "$1" 2>/dev/null || exit 1; shift; exec tasks-axi show "$@"' \
+      _ "$dir" "$id" --full --file "$dir/backlog.md" 2>/dev/null)
+    status=$?
+    if [ "$status" -eq 124 ]; then
+      printf 'fm-captain-hold: tasks-axi show %s exceeded its %ss Done-archive read bound\n' "$id" "$secs" >&2
+    elif [ "$status" -ne 0 ]; then
+      status=1
+    fi
   fi
   rm -f -- "$dir/backlog.md" "$dir/.tasks.toml"
   rmdir -- "$dir" 2>/dev/null || true
@@ -868,18 +898,25 @@ task_show_archived() {  # <id>; sets TASK_SHOW_OUTPUT
 }
 
 # The archived row an entry names, under its exact id or its legacy identity.
+# A read that hit its bound is not absence: it returns 124 so the caller stops
+# loudly instead of reading the row as unarchived.
 archived_entry() {  # <origin-or-empty> <entry>; prints the archived id
-  local origin=$1 entry=$2 legacy
-  if task_show_archived "$entry"; then
+  local origin=$1 entry=$2 legacy status=0
+  task_show_archived "$entry" || status=$?
+  if [ "$status" -eq 0 ]; then
     printf '%s' "$entry"
     return 0
   fi
+  [ "$status" -ne 124 ] || return 124
   if [ -n "$origin" ] && [ "$origin" != "$BINDING_ANY" ]; then
     legacy=$(legacy_hold_id "$origin" "$entry")
-    if task_show_archived "$legacy"; then
+    status=0
+    task_show_archived "$legacy" || status=$?
+    if [ "$status" -eq 0 ]; then
       printf '%s' "$legacy"
       return 0
     fi
+    [ "$status" -ne 124 ] || return 124
   fi
   return 1
 }
@@ -891,13 +928,22 @@ archived_entry() {  # <origin-or-empty> <entry>; prints the archived id
 # as absence. On success prints "<id> <how>" so the caller can keep the
 # attestation evidence.
 verify_entry_durable() {  # <origin-or-empty> <entry>; prints "<id> <how>"
-  local origin=$1 entry=$2 resolved resolve_status=0 resolve_err archived
+  local origin=$1 entry=$2 resolved resolve_status=0 resolve_err archived archived_status
   resolve_err=$(mktemp "${TMPDIR:-/tmp}/fm-captain-hold-resolve.XXXXXX") \
     || fail "cannot stage the resolution diagnostics for $entry"
   resolved=$(resolve_entry "$origin" "$entry" 2>"$resolve_err") || resolve_status=$?
-  if [ "$resolve_status" -eq 1 ] && archived=$(archived_entry "$origin" "$entry"); then
-    resolved="$archived archived"
-    resolve_status=0
+  if [ "$resolve_status" -eq 1 ]; then
+    archived_status=0
+    archived=$(archived_entry "$origin" "$entry") || archived_status=$?
+    if [ "$archived_status" -eq 0 ]; then
+      resolved="$archived archived"
+      resolve_status=0
+    elif [ "$archived_status" -eq 124 ]; then
+      rm -f -- "$resolve_err"
+      exit 124
+    else
+      cat "$resolve_err" >&2
+    fi
   else
     cat "$resolve_err" >&2
   fi
