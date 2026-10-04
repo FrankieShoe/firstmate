@@ -1,0 +1,3 @@
+ok - cleanup preserves every byte of a retained body's non-ASCII characters
+ok - an answered captain call archived by Done retention still satisfies the completion gate
+ok - an answered captain call archived to a user-configured location still satisfies the completion gate

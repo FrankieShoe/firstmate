@@ -1,0 +1,68 @@
+## Marked lab home (fm-lab-home.sh create), real tasks-axi 0.2.6, tmux faked
+$ bin/fm-captain-hold.sh hold pig-reset-open-calls-dna-9774 --title Reset open calls? --reason captain choice pending --repo sample --origin pig-reset-service-and-graph-dna-9774
+pig-reset-open-calls-dna-9774
+[exit 0]
+$ bin/fm-captain-hold.sh complete pig-reset-service-and-graph-dna-9774 pig-reset-open-calls-dna-9774
+complete: pig-reset-service-and-graph-dna-9774 captain-call inventory reviewed (pig-reset-open-calls-dna-9774)
+[exit 0]
+$ bin/fm-captain-hold.sh answer pig-reset-open-calls-dna-9774 --decision-file $LAB/decision.txt
+answered: pig-reset-open-calls-dna-9774
+[exit 0]
+## verify before Done retention
+$ bin/fm-captain-hold.sh verify pig-reset-service-and-graph-dna-9774
+verified: pig-reset-service-and-graph-dna-9774 captain-call inventory
+[exit 0]
+## Trigger Done retention (done_keep=0)
+$ grep pig-reset-open-calls-dna-9774 data/done-archive.md
+4:- [x] pig-reset-open-calls-dna-9774 - Reset open calls? (repo: sample) (kind: captain) (done 2026-10-05) (hold: fm-hold-v1:Y2FwdGFpbiBjaG9pY2UgcGVuZGluZw==) (hold-kind: captain)
+$ tasks-axi show pig-reset-open-calls-dna-9774
+error: "Task \"pig-reset-open-calls-dna-9774\" not found in this backlog"
+## verify/complete after the answered hold was archived
+$ bin/fm-captain-hold.sh verify pig-reset-service-and-graph-dna-9774
+verified: pig-reset-service-and-graph-dna-9774 captain-call inventory
+[exit 0]
+$ bin/fm-captain-hold.sh complete pig-reset-service-and-graph-dna-9774 pig-reset-open-calls-dna-9774
+complete: pig-reset-service-and-graph-dna-9774 captain-call inventory reviewed (pig-reset-open-calls-dna-9774)
+[exit 0]
+## ADVERSARIAL A: wedged tasks-axi on the archived read, FM_BACKLOG_ROW_TIMEOUT_SECS=2
+$ bin/fm-captain-hold.sh verify pig-reset-service-and-graph-dna-9774   (slow archive read)
+fm-captain-hold: tasks-axi show pig-reset-open-calls-dna-9774 exceeded its 2s Done-archive read bound
+[exit 124 after 5s]
+## Real teardown of the scout whose answered hold is archived
+$ bin/fm-teardown.sh pig-reset-service-and-graph-dna-9774
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  watcher supervision needs Stop-owned automatic recovery; inspect the hook registration and startup status before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+teardown pig-reset-service-and-graph-dna-9774 complete (window firstmate:fm-pig-reset-service-and-graph-dna-9774, worktree $LAB/projects/missing-pig-reset-service-and-graph-dna-9774)
+Backlog: pig-reset-service-and-graph-dna-9774 is closed in /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.K5JSIu/data/backlog.md. Run bin/fm-tasks-axi.sh ready for dependency-cleared candidates, check date gates, and dispatch only work whose blockers are gone and date is due.
+[exit 0]
+scout meta removed by teardown
+## ADVERSARIAL B: archived close with NO captain answer must still refuse
+$ bin/fm-captain-hold.sh hold lab-unanswered-call --title Unanswered? --reason pending --repo sample --origin lab-unanswered-scout
+lab-unanswered-call
+[exit 0]
+$ bin/fm-captain-hold.sh complete lab-unanswered-scout lab-unanswered-call
+complete: lab-unanswered-scout captain-call inventory reviewed (lab-unanswered-call)
+[exit 0]
+$ grep -c lab-unanswered-call data/done-archive.md
+1
+$ bin/fm-captain-hold.sh verify lab-unanswered-scout
+fm-captain-hold: captain-held task lab-unanswered-call is neither held for the captain nor closed with a recorded captain answer
+[exit 1]
+$ bin/fm-teardown.sh lab-unanswered-scout
+fm-gate-refuse: gate agent lifecycle permitted only against lab home $LAB
+WARNING: watcher still down (same stale episode; last beat: never, grace 300s) - full banner already printed this episode.
+fm-captain-hold: captain-held task lab-unanswered-call is neither held for the captain nor closed with a recorded captain answer
+REFUSED: scout task lab-unanswered-scout has not passed the captain-call completion gate.
+Inventory its report and any visual review through bin/fm-captain-hold.sh before teardown.
+[exit 1]
+meta still present (teardown refused)
+## ADVERSARIAL C: attested call that exists nowhere must still refuse
+$ bin/fm-captain-hold.sh verify lab-unanswered-scout
+fm-captain-hold: no captain-held task lab-never-held-call and no migrated hold for it in this home's configured backlog (data directory $LAB/data); the nearest legacy identity lab-unanswered-scout-decision-lab-never-held-call also resolves to nothing
+[exit 1]
