@@ -108,6 +108,7 @@ A post-teardown visual review can complete against the surviving report and dura
 `complete` accepts `--none` as an explicit semantic inventory result.
 `--none` is refused while the origin still has a lifecycle-open keyed status decision.
 Before recording completion, `complete` verifies every listed task against tasks-axi.
+An answered entry that markdown Done retention moved into the configured Done archive still counts, while an archived close with no recorded answer does not.
 The origin is never its own inventory entry, so a hold that failed cannot be vouched for by the origin row.
 For a historical inventory that names its own origin, hold a separate captain task with `--origin`, replace only the invalid entry in the final `decision_keys=` line of the origin metadata with that task id while preserving all other entries, and re-run `complete`.
 An entry whose recorded origin differs from the one being completed is refused.
@@ -124,7 +125,6 @@ Scout teardown calls the read-only `verify` subcommand after checking for the re
 
 - The recorded attestation exists.
 - Every recorded inventory entry still passes the [completion inventory checks](#recording-a-reviewed-inventory-complete).
-  An answered entry that markdown Done retention moved into the configured Done archive still counts, while an archived close with no recorded answer does not.
 - No keyed status decision opened after the last `complete`.
 
 A keyed status decision opened after the last `complete` makes `verify` fail, and re-running `complete` is the repair.
