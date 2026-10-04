@@ -1,0 +1,41 @@
+== root=/Users/hamishgray/.no-mistakes/worktrees/4f4eb3e494f1/01M44BTJ2RX18C8JFXJF3NY4P0 mode=default archive=data/done-archive.md
+[exit 0]
+[exit 0]
+verified: pig-reset-service-and-graph-dna-9774 captain-call inventory
+[exit 0]
+-- Done retention: done_keep=0, close a trigger row
+archive has call: 1
+live backlog no longer shows call
+$ fm-captain-hold.sh verify pig-reset-service-and-graph-dna-9774
+verified: pig-reset-service-and-graph-dna-9774 captain-call inventory
+[exit 0]
+$ fm-captain-hold.sh complete pig-reset-service-and-graph-dna-9774 pig-reset-open-calls-dna-9774
+complete: pig-reset-service-and-graph-dna-9774 captain-call inventory reviewed (pig-reset-open-calls-dna-9774)
+[exit 0]
+$ fm-teardown.sh pig-reset-service-and-graph-dna-9774
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+teardown pig-reset-service-and-graph-dna-9774 complete (window firstmate:fm-pig-reset-service-and-graph-dna-9774, worktree /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.OW9x4d/projects/missing-pig-reset-service-and-graph-dna-9774)
+Backlog: pig-reset-service-and-graph-dna-9774 is closed in /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.OW9x4d/data/backlog.md. Run bin/fm-tasks-axi.sh ready for dependency-cleared candidates, check date gates, and dispatch only work whose blockers are gone and date is due.
+[exit 0]
+meta removed (teardown proceeded)
+-- Adversarial: archived close with no captain answer
+[exit 0]
+archive has unanswered call: 1
+$ fm-captain-hold.sh verify sample-unanswered-review
+fm-captain-hold: captain-held task sample-unanswered-call is neither held for the captain nor closed with a recorded captain answer
+[exit 1]
+$ fm-teardown.sh sample-unanswered-review
+REFUSED: scout task sample-unanswered-review has not passed the captain-call completion gate.
+Inventory its report and any visual review through bin/fm-captain-hold.sh before teardown.
+[exit 1]
+meta still present (refused)
+-- Adversarial: attested call found nowhere
+$ fm-captain-hold.sh verify sample-unanswered-review
+fm-captain-hold: no captain-held task sample-never-held-call and no migrated hold for it in this home's configured backlog (data directory /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.OW9x4d/data); the nearest legacy identity sample-unanswered-review-decision-sample-never-held-call also resolves to nothing
+[exit 1]
+-- Adversarial: wedged tasks-axi on archive read (bound 2s)
+[exit 0]
+[exit 0]
+$ FM_BACKLOG_ROW_TIMEOUT_SECS=2 fm-captain-hold.sh verify sample-wedge-review
+fm-captain-hold: tasks-axi show sample-wedge-call exceeded its 2s Done-archive read bound
+[exit 124] after 4s

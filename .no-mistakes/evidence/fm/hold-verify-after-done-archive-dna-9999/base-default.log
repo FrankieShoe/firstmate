@@ -1,0 +1,41 @@
+== root=/tmp/fm-base.VZEwu6 mode=default archive=data/done-archive.md
+[exit 0]
+[exit 0]
+verified: pig-reset-service-and-graph-dna-9774 captain-call inventory
+[exit 0]
+-- Done retention: done_keep=0, close a trigger row
+archive has call: 1
+live backlog no longer shows call
+$ fm-captain-hold.sh verify pig-reset-service-and-graph-dna-9774
+fm-captain-hold: no captain-held task pig-reset-open-calls-dna-9774 and no migrated hold for it in this home's configured backlog (data directory /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.RKzEBW/data); the nearest legacy identity pig-reset-service-and-graph-dna-9774-decision-pig-reset-open-calls-dna-9774 also resolves to nothing
+[exit 1]
+$ fm-captain-hold.sh complete pig-reset-service-and-graph-dna-9774 pig-reset-open-calls-dna-9774
+fm-captain-hold: no captain-held task pig-reset-open-calls-dna-9774 and no migrated hold for it in this home's configured backlog (data directory /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.RKzEBW/data); the nearest legacy identity pig-reset-service-and-graph-dna-9774-decision-pig-reset-open-calls-dna-9774 also resolves to nothing
+[exit 1]
+$ fm-teardown.sh pig-reset-service-and-graph-dna-9774
+fm-captain-hold: no captain-held task pig-reset-open-calls-dna-9774 and no migrated hold for it in this home's configured backlog (data directory /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.RKzEBW/data); the nearest legacy identity pig-reset-service-and-graph-dna-9774-decision-pig-reset-open-calls-dna-9774 also resolves to nothing
+REFUSED: scout task pig-reset-service-and-graph-dna-9774 has not passed the captain-call completion gate.
+Inventory its report and any visual review through bin/fm-captain-hold.sh before teardown.
+[exit 1]
+meta still present
+-- Adversarial: archived close with no captain answer
+[exit 0]
+archive has unanswered call: 1
+$ fm-captain-hold.sh verify sample-unanswered-review
+fm-captain-hold: no captain-held task sample-unanswered-call and no migrated hold for it in this home's configured backlog (data directory /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.RKzEBW/data); the nearest legacy identity sample-unanswered-review-decision-sample-unanswered-call also resolves to nothing
+[exit 1]
+$ fm-teardown.sh sample-unanswered-review
+REFUSED: scout task sample-unanswered-review has not passed the captain-call completion gate.
+Inventory its report and any visual review through bin/fm-captain-hold.sh before teardown.
+[exit 1]
+meta still present (refused)
+-- Adversarial: attested call found nowhere
+$ fm-captain-hold.sh verify sample-unanswered-review
+fm-captain-hold: no captain-held task sample-never-held-call and no migrated hold for it in this home's configured backlog (data directory /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.RKzEBW/data); the nearest legacy identity sample-unanswered-review-decision-sample-never-held-call also resolves to nothing
+[exit 1]
+-- Adversarial: wedged tasks-axi on archive read (bound 2s)
+[exit 0]
+[exit 0]
+$ FM_BACKLOG_ROW_TIMEOUT_SECS=2 fm-captain-hold.sh verify sample-wedge-review
+fm-captain-hold: no captain-held task sample-wedge-call and no migrated hold for it in this home's configured backlog (data directory /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.RKzEBW/data); the nearest legacy identity sample-wedge-review-decision-sample-wedge-call also resolves to nothing
+[exit 1] after 1s
