@@ -1,0 +1,12 @@
+== test_wedge_threshold_defers_to_an_executing_validation_run
+ok - a running or fixing validation run is deferred on the long recheck cadence rather than wedge-escalated
+== test_wedge_threshold_defers_to_an_executing_validation_run (bash 3.2)
+ok - a running or fixing validation run is deferred on the long recheck cadence rather than wedge-escalated
+== test_wedge_threshold_escalates_when_no_run_is_executing
+ok - parked, terminal, ci-monitoring, coarse, runless, absent and unreadable runs keep the unchanged wedge ladder
+== test_wedge_threshold_escalates_when_no_run_is_executing (bash 3.2)
+ok - parked, terminal, ci-monitoring, coarse, runless, absent and unreadable runs keep the unchanged wedge ladder
+== test_wedge_threshold_parked_gate_is_off_until_armed
+ok - with config/wedge-defer-parked-gate absent a parked gate keeps the unchanged ladder, wording and reads
+== test_wedge_threshold_parked_gate_is_off_until_armed (bash 3.2)
+ok - with config/wedge-defer-parked-gate absent a parked gate keeps the unchanged ladder, wording and reads

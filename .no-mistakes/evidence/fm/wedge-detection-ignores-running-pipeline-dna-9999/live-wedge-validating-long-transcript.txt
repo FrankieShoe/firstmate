@@ -1,0 +1,17 @@
+lab session: fm-lab-wedgeval-37173-11089  lab home: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.IlqG7w
+task wedge -> fm-lab-wedgeval-37173-11089:w1:p2 (worktree /Users/hamishgray/.treehouse/firstmate-7bab20/1/firstmate)
+--- real fm-crew-state.sh verdicts
+wedge: state: working · source: run-step · validating (running) · run: 01M47REQ7RKP8THNMD6K11C1HF
+--- backend agent state
+wedge: alive
+--- driving real fm-watch.sh for 90s (FM_STALE_ESCALATE_SECS=6)
+[round 1] watcher exited with wake: stale: fm-lab-wedgeval-37173-11089:w1:p2 (idle 7s, no-mistakes run 01M47REQ7RKP8THNMD6K11C1HF validating (running) for 35s, rechecked on a long cadence not a wedge; confirm the run is still progressing)
+[round 2] watcher still running at deadline (no wake) - stopped
+--- wake queue (stale rows)
+--- triage log
+--- markers
+-rw-r--r--@  1 hamishgray  staff    11 Oct  6 18:04 .stale-since-fm-lab-wedgeval-37173-11089_w1_p2
+-rw-r--r--@  1 hamishgray  staff    11 Oct  6 18:03 .validating-resurfaced-fm-lab-wedgeval-37173-11089_w1_p2
+-rw-r--r--@  1 hamishgray  staff    26 Oct  6 18:03 .validating-since-fm-lab-wedgeval-37173-11089_w1_p2
+.validating-since-fm-lab-wedgeval-37173-11089_w1_p2: 01M47REQ7RKP8THNMD6K11C1HF
+teardown rc=0

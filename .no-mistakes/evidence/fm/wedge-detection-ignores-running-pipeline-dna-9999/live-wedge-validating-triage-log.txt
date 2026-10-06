@@ -1,0 +1,6 @@
+[2026-10-06T18:01:16+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-98027-24040:w1:p3
+[2026-10-06T18:01:18+1300] absorbed non-terminal stale (provably working): fm-lab-wedgeval-98027-24040:w1:p2
+[2026-10-06T18:01:32+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-98027-24040:w1:p3
+[2026-10-06T18:01:38+1300] absorbed non-terminal stale (no-mistakes run 01M47REQ7RKP8THNMD6K11C1HF validating (running), idle 14s): fm-lab-wedgeval-98027-24040:w1:p2
+[2026-10-06T18:01:50+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-98027-24040:w1:p3
+[2026-10-06T18:01:55+1300] absorbed non-terminal stale (no-mistakes run 01M47REQ7RKP8THNMD6K11C1HF validating (running), idle 12s): fm-lab-wedgeval-98027-24040:w1:p2

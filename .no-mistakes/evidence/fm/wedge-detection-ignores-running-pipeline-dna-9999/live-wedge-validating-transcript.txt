@@ -1,0 +1,25 @@
+lab session: fm-lab-wedgeval-98027-24040  lab home: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.OkkyXX
+task wedge -> fm-lab-wedgeval-98027-24040:w1:p2 (worktree /Users/hamishgray/.treehouse/firstmate-7bab20/1/firstmate)
+task norun -> fm-lab-wedgeval-98027-24040:w1:p3 (worktree /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.OkkyXX/norun)
+--- real fm-crew-state.sh verdicts
+wedge: state: working · source: run-step · validating (running) · run: 01M47REQ7RKP8THNMD6K11C1HF
+norun: state: working · source: status-log · handed to validation
+--- backend agent state
+wedge: alive
+norun: alive
+--- driving real fm-watch.sh for 75s (FM_STALE_ESCALATE_SECS=6)
+[round 1] watcher exited with wake: signal: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.OkkyXX/state/norun.status /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.OkkyXX/state/wedge.status
+[round 2] watcher exited with wake: stale: fm-lab-wedgeval-98027-24040:w1:p3
+[round 3] watcher exited with wake: stale: fm-lab-wedgeval-98027-24040:w1:p3 (idle 7s, possible wedge, escalation 1)
+[round 4] watcher exited with wake: stale: fm-lab-wedgeval-98027-24040:w1:p3 (idle 8s, possible wedge, escalation 2)
+[round 5] watcher exited with wake: stale: fm-lab-wedgeval-98027-24040:w1:p3 (idle 7s, possible wedge, escalation 3, demand-deep-inspection: same pane has wedge-escalated 3 times in a row - do not re-absorb on the run-step/pane state alone)
+[round 6] watcher still running at deadline (no wake) - stopped
+--- wake queue (stale rows)
+--- triage log
+--- markers
+-rw-r--r--@  1 hamishgray  staff    11 Oct  6 18:01 .stale-since-fm-lab-wedgeval-98027-24040_w1_p2
+-rw-r--r--@  1 hamishgray  staff    26 Oct  6 18:01 .validating-since-fm-lab-wedgeval-98027-24040_w1_p2
+-rw-r--r--@  1 hamishgray  staff     2 Oct  6 18:02 .wedge-escalations-fm-lab-wedgeval-98027-24040_w1_p3
+.validating-since-fm-lab-wedgeval-98027-24040_w1_p2: 01M47REQ7RKP8THNMD6K11C1HF
+.wedge-escalations-fm-lab-wedgeval-98027-24040_w1_p3: 3
+teardown rc=0

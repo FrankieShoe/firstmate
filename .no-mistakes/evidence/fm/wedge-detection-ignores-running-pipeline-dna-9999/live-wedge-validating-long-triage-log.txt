@@ -1,0 +1,7 @@
+[2026-10-06T18:02:56+1300] absorbed benign signal: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T//fm-lab.IlqG7w/state/wedge.status
+[2026-10-06T18:03:03+1300] absorbed non-terminal stale (provably working): fm-lab-wedgeval-37173-11089:w1:p2
+[2026-10-06T18:03:14+1300] absorbed non-terminal stale (no-mistakes run 01M47REQ7RKP8THNMD6K11C1HF validating (running), idle 7s): fm-lab-wedgeval-37173-11089:w1:p2
+[2026-10-06T18:03:26+1300] absorbed non-terminal stale (no-mistakes run 01M47REQ7RKP8THNMD6K11C1HF validating (running), idle 7s): fm-lab-wedgeval-37173-11089:w1:p2
+[2026-10-06T18:03:37+1300] absorbed non-terminal stale (no-mistakes run 01M47REQ7RKP8THNMD6K11C1HF validating (running), idle 6s): fm-lab-wedgeval-37173-11089:w1:p2
+[2026-10-06T18:04:02+1300] absorbed non-terminal stale (no-mistakes run 01M47REQ7RKP8THNMD6K11C1HF validating (running), idle 7s): fm-lab-wedgeval-37173-11089:w1:p2
+[2026-10-06T18:04:13+1300] absorbed non-terminal stale (no-mistakes run 01M47REQ7RKP8THNMD6K11C1HF validating (running), idle 6s): fm-lab-wedgeval-37173-11089:w1:p2
