@@ -1158,8 +1158,8 @@ FM_WEDGE_DEMAND_INSPECT_COUNT=${FM_WEDGE_DEMAND_INSPECT_COUNT:-3}
 # once past PAUSE_RESURFACE_SECS the pane wakes once per window rather than every
 # poll. An optional <scope> binds that cadence to its current declaration; callers
 # without a scoped declaration keep the timestamp body. Shared by the
-# declared-pause absorb and the worktree-write deferral so the two cadences cannot
-# drift apart; each caller owns its own marker and reason.
+# declared-pause absorb and the wedge deferrals so their cadences cannot drift
+# apart; each caller owns its own marker and reason.
 # Returns without waking while either the absorb or the throttle is inside the
 # window; wake() itself exits the cycle, exactly as it does inline. An optional
 # <min-age> replaces the cadence as the absorb-age gate for one call (0 lets a
@@ -1557,7 +1557,7 @@ wedge_timer_check() {  # <window> <since-file> <triage-label> <escalation-count-
   since=$(cat "$since_file" 2>/dev/null || true)
   case "$since" in
     ''|*[!0-9]*)
-      # Publish the repaired timer only after its old write-deferral chain is
+      # Publish the repaired timer only after its old deferral chains are
       # gone, so observers cannot mistake a new idle window for the old chain.
       clear_deferral_chains "$(window_key "$win")"
       date +%s > "$since_file"
@@ -1712,7 +1712,7 @@ busy_turn_bound_check() {  # <window> <task> <hash> <since-file> <escalation-fil
       # woken in a loop for the whole declared wait. The suppressor therefore
       # advances to the declaration rather than the hash, and the daemon is woken
       # once per distinct declaration. The wedge timer, escalation count and
-      # write-deferral chain are cleared exactly as handle_paused_stale clears
+      # deferral chains are cleared exactly as handle_paused_stale clears
       # them, so an undeclared busy phase that had already started the timer does
       # not resume its count the moment the declaration is lifted. Normal-mode
       # pause tracking stays unwritten here, exactly as the idle away-mode handoff
@@ -1746,8 +1746,8 @@ clear_pause_state() {  # <window-key>
 }
 
 # The hash-scoped half of clear_pause_tracking: the stale suppressor, its wedge
-# timer and escalation count, and both deferral chains the timer can take - the
-# write-deferral chain and the wait-deferral throttle. Split out so a caller
+# timer and escalation count, and the deferral chains the timer can take - the
+# write- and validating-deferral chains and the wait-deferral throttle. Split out so a caller
 # that must keep a window's DECLARATION-scoped pause state - its .paused-* flag,
 # recheck, and re-surface throttle - can still reset the per-hash half alone.
 clear_stale_hash_tracking() {  # <window-key>
