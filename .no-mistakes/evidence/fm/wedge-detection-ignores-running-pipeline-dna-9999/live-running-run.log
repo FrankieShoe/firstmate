@@ -1,0 +1,20 @@
+== real crew-state verdict for this lane:
+state: working · source: run-step · validating (running) · run: 01M51JG1J01WMXT158Y58BA760
+-- round 1: watcher still polling after 40s, no wake emitted
+-- round 2: watcher still polling after 40s, no wake emitted
+== triage log (absorb/escalate decisions):
+[2026-10-16T18:44:08+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:12+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:16+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:20+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:25+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:29+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:33+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:37+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:40+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 1s): test:fm-wedge
+[2026-10-16T18:44:44+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:48+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+[2026-10-16T18:44:52+1300] absorbed non-terminal stale (no-mistakes run 01M51JG1J01WMXT158Y58BA760 validating (running), idle 2s): test:fm-wedge
+== .validating-since-test_fm-wedge: 01M51JG1J01WMXT158Y58BA760
+== .wedge-escalations-test_fm-wedge: <absent>
+== stale wakes queued: 0

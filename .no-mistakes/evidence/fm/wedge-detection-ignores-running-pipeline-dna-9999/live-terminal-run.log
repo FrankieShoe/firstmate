@@ -1,0 +1,12 @@
+== real crew-state verdict for this lane:
+state: done · source: run-step · run passed: PR open · run: 01M44BTJ2RX18C8JFXJF3NY4P0
+-- round 1: watcher exited with wake: stale: test:fm-wedge (idle 2s, possible wedge, escalation 1)
+-- round 2: watcher exited with wake: stale: test:fm-wedge (idle 2s, possible wedge, escalation 2)
+-- round 3: watcher exited with wake: stale: test:fm-wedge (idle 2s, possible wedge, escalation 3, demand-deep-inspection: same pane has wedge-escalated 3 times in a row - do not re-absorb on the run-step/pane state alone)
+== triage log (absorb/escalate decisions):
+[2026-10-16T18:42:48+1300] absorbed non-terminal stale timer reset: test:fm-wedge
+[2026-10-16T18:42:58+1300] absorbed non-terminal stale timer reset: test:fm-wedge
+[2026-10-16T18:43:07+1300] absorbed non-terminal stale timer reset: test:fm-wedge
+== .validating-since-test_fm-wedge: <absent>
+== .wedge-escalations-test_fm-wedge: 3
+== stale wakes queued: 0

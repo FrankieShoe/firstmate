@@ -1,0 +1,3 @@
+  not ok - an undeclared working lane did not reach escalation 1: signal: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-watch-triage-tests.oQpGw1/declared-wait-control/state/wedge.status
+test_wedge_threshold_defers_to_a_declared_wait_under_a_working_verdict fail=1/6
+test_wedge_threshold_defers_to_an_executing_validation_run fail=0/6
