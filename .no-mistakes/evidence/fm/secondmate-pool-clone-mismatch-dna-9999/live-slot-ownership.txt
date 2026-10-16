@@ -1,0 +1,18 @@
+[mate home] task lv2-after
+  worktree=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/mate/state/treehouse/.treehouse/project-37d5c4/1/project
+  slot git-common-dir=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/mate/projects/project/.git
+  mate clone git-common-dir=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/mate/projects/project/.git
+[main home] task lv2-main
+  worktree=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/default-treehouse-root/.treehouse/project-37d5c4/2/project
+  slot git-common-dir=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/main/projects/project/.git
+  main clone git-common-dir=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/main/projects/project/.git
+[mate] treehouse status of own pool:
+
+1     in-use       /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/mate/state/treehouse/.treehouse/project-37d5c4/1/project
+                   zsh (49177), 2.1.301 (51477)
+[shared default pool, TREEHOUSE_ROOT=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/default-treehouse-root] status:
+
+1     in-use       /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/default-treehouse-root/.treehouse/project-37d5c4/1/project
+                   zsh (45941)
+2     in-use       /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/default-treehouse-root/.treehouse/project-37d5c4/2/project
+                   zsh (52679), 2.1.301 (54917)

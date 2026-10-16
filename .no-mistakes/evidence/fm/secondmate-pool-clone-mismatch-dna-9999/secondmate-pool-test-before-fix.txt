@@ -1,0 +1,4 @@
+not ok - a local secondmate spawn should launch from its own clone's pool
+error: refusing to pre-register Claude trust: '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-spawn-secondmate-pool.MZ1cS9/local-mate/treehouse/project-pool/1/project' is not a worktree of project '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-spawn-secondmate-pool.MZ1cS9/local-mate/mate-home/projects/project'
+error: could not pre-register Claude workspace trust for /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-spawn-secondmate-pool.MZ1cS9/local-mate/treehouse/project-pool/1/project; refusing to launch a claude worker that would wedge on the trust dialog; inspect window firstmate:fm-mate-pool-own-clone-s1: expected exit 0, got 1
+exit=

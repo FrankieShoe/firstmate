@@ -1,0 +1,64 @@
+treehouse get
+
+project on  main ☁  default
+› treehouse get
+A new version of treehouse is available: v2.3.0 → v3.1.4
+Run "treehouse update" to update
+
+🌳 Setting up worktree...
+🌳 Entered worktree at /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/default-treehouse-root/.tr
+eehouse/project-37d5c4/2/project. Type 'exit' to return.
+
+projcd -- '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/default-treehouse-root/.treehouse/proj
+ect-37d5c4/2/project'
+
+project on  HEAD ☁  default
+› export GOTMPDIR=/tmp/fm-lv2-main/gotmp
+export COMPACT_ADVISER_DISABLE=1
+export FM_TASK_ID=lv2-main
+
+project on  HEAD ☁  default
+› export COMPACT_ADVISER_DISABLE=1
+
+project on  HEAD ☁  default
+› export FM_TASK_ID=lv2-main
+
+proj. '/tmp/fm-lv2-main+2436111d22cad61e528c714ca62806449f23c07538c6b9d27a81c2173a9fe107/launch.s1792128398.51500.15582.
+sh'
+Welcome to Claude Code v2.1.301
+..........................................................
+
+     *                                       █████▓▓░
+                                 *         ███▓░     ░░
+            ░░░░░░                        ███▓░
+    ░░░   ░░░░░░░░░░                      ███▓░
+   ░░░░░░░░░░░░░░░░░░░    *                ██▓░░      ▓
+                                             ░▓▓███▓▓░
+ *                                 ░░░░
+                                 ░░░░░░░░
+                               ░░░░░░░░░░░░░░░░
+       █████████                                        *
+      ██▄█████▄██                        *
+       █████████      *
+.......█ █   █ █..........................................
+
+ Let's get started.
+
+ Choose the text style that looks best with your terminal
+ To change this later, run /theme
+
+     Auto (match terminal)
+ ❯ ✔ Dark mode
+     Light mode
+     Dark mode (colorblind-friendly)
+     Light mode (colorblind-friendly)
+     Dark mode (ANSI colors only)
+     Light mode (ANSI colors only)
+
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+  1  function greet() {
+  2 -  console.log("Hello, World!");
+  2 +  console.log("Hello, Claude!");
+  3  }
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+  Syntax theme: Monokai Extended (ctrl+t to disable)

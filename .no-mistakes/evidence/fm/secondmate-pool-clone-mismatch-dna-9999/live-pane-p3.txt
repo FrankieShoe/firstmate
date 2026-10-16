@@ -1,0 +1,64 @@
+treehouse --root '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/mate/state/treehouse' get
+
+project on  main ☁  default
+› treehouse --root '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/mate/state/treehouse' get
+A new version of treehouse is available: v2.3.0 → v3.1.4
+Run "treehouse update" to update
+
+🌳 Setting up worktree...
+🌳 Entered worktree at /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/mate/state/treehouse/.tree
+house/project-37d5c4/1/project. Type 'exit' to return.
+
+projcd -- '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/mate/state/treehouse/.treehouse/projec
+t-37d5c4/1/project'
+
+project on  HEAD ☁  default
+› export GOTMPDIR=/tmp/fm-lv2-after/gotmp
+export COMPACT_ADVISER_DISABLE=1
+export FM_TASK_ID=lv2-after
+
+project on  HEAD ☁  default
+› export COMPACT_ADVISER_DISABLE=1
+
+project on  HEAD ☁  default
+› export FM_TASK_ID=lv2-after
+
+proj. '/tmp/fm-lv2-after+c92cb9797fe5751a73432cc6f4fe9f98a4cf1e7da22fd37a46997c924584a2cd/launch.s1792128391.48159.18660
+.sh'
+Welcome to Claude Code v2.1.301
+..........................................................
+
+     *                                       █████▓▓░
+                                 *         ███▓░     ░░
+            ░░░░░░                        ███▓░
+    ░░░   ░░░░░░░░░░                      ███▓░
+   ░░░░░░░░░░░░░░░░░░░    *                ██▓░░      ▓
+                                             ░▓▓███▓▓░
+ *                                 ░░░░
+                                 ░░░░░░░░
+                               ░░░░░░░░░░░░░░░░
+       █████████                                        *
+      ██▄█████▄██                        *
+       █████████      *
+.......█ █   █ █..........................................
+
+ Let's get started.
+
+ Choose the text style that looks best with your terminal
+ To change this later, run /theme
+
+     Auto (match terminal)
+ ❯ ✔ Dark mode
+     Light mode
+     Dark mode (colorblind-friendly)
+     Light mode (colorblind-friendly)
+     Dark mode (ANSI colors only)
+     Light mode (ANSI colors only)
+
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+  1  function greet() {
+  2 -  console.log("Hello, World!");
+  2 +  console.log("Hello, Claude!");
+  3  }
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+  Syntax theme: Monokai Extended (ctrl+t to disable)

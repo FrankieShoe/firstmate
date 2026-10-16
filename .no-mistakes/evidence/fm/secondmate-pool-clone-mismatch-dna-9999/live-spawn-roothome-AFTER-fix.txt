@@ -1,0 +1,2 @@
+spawned lv2-main harness=claude kind=scout window=fm-lab-poolfix-35378-24624:w1:p4 worktree=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.JCZHWl/default-treehouse-root/.treehouse/project-37d5c4/2/project
+exit=0

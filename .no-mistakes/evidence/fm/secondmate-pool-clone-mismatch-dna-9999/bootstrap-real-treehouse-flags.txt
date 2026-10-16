@@ -1,0 +1,2 @@
+$ treehouse --version: v2.3.0
+fm-bootstrap treehouse_supports_required_flags (real treehouse v2.3.0): SUPPORTED -> no MISSING line
