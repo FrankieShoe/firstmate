@@ -1,0 +1,5 @@
+## treehouse status (all clean)
+{"name":"1","status":"available"}
+{"name":"2","status":"available"}
+## spawn_treehouse_dirty_slots_note output:
+[]

@@ -1,0 +1,31 @@
+## lab home: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.90rOZ3
+## before teardown: treehouse status + slot contents
+{"name":"1","path":"/tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/1/proj","status":"dirty"}
+{"name":"2","path":"/tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/2/proj","status":"available"}
+?? .scout/sibling-repo/
+sibling-repo
+## run: FM_HOME=lab bin/fm-teardown.sh task-x1 (real treehouse, kind=scout; tmux/gh stubbed)
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.90rOZ3
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  watcher supervision needs Stop-owned automatic recovery; inspect the hook registration and startup status before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌳 Worktree returned to pool.
+teardown task-x1 complete (window firstmate:fm-task-x1, worktree /tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/1/proj)
+Backlog: task-x1 just finished (this home keeps no markdown backlog at /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.90rOZ3/data/backlog.md). Update /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.90rOZ3/data/backlog.md - move task-x1 to Done, keep Done to the 10 most recent, then re-scan Queued and dispatch only work whose blockers are gone and date is due.
+teardown rc=
+## after teardown
+{"name":"1","path":"/tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/1/proj","status":"available"}
+{"name":"2","path":"/tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/2/proj","status":"available"}
+porcelain: []
+ls: /tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/1/proj/.scout: No such file or directory
+## next treehouse get (which slot is handed out?)
+
+🌳 Setting up worktree...
+🌳 Entered worktree at /tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/1/proj. Type 'exit' to return.
+/private/tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/1/proj
+🌳 Worktree returned to pool.

@@ -1,0 +1,1 @@
+error: treehouse get did not enter an isolated worktree within 60s (last seen '/tmp/fm-th-live.Yt1sAH/proj': ...); treehouse skips dirty pool slots, and these hold uncommitted or untracked files: /tmp/fm-th-live.Yt1sAH/pool/.treehouse/proj-4451b4/1/proj; <endpoint hint>
