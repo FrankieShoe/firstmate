@@ -32,8 +32,27 @@ case "$*" in
     exit 0
     ;;
 esac
+window_file="$(dirname "$0")/.spawn-window"
 case "${1:-}" in
   display-message) printf 'firstmate\n'; exit 0 ;;
+  list-windows)
+    [ ! -s "$window_file" ] || cat "$window_file"
+    exit 0
+    ;;
+  new-window)
+    name=
+    previous=
+    for arg in "$@"; do
+      [ "$previous" = -n ] && name=$arg
+      previous=$arg
+    done
+    printf '%s\n' "$name" > "$window_file"
+    exit 0
+    ;;
+  kill-window)
+    : > "$window_file"
+    exit 0
+    ;;
   send-keys)
     text=${4:-}
     case "$text" in
