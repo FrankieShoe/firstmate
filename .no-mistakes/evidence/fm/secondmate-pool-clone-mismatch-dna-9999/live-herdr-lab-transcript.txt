@@ -1,0 +1,33 @@
+== LAB=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh SESSION=fm-lab-poolchk-75569-15080 treehouse=v2.3.0 herdr=herdr 0.9.0
+== the root home's clone grows a slot in the shared default pool, then returns it
+shared slot: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/th-default/.treehouse/project-c97aea/1/project
+shared slot git-common-dir: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/main-home/projects/project/.git
+
+######## SCENARIO A: pre-fix fm-spawn (base bd866530) from a LOCAL SECONDMATE home
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/mate-home
+error: refusing to pre-register Claude trust: '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/th-default/.treehouse/project-c97aea/1/project' is not a worktree of project '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/mate-home/projects/project'
+error: could not pre-register Claude workspace trust for /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/th-default/.treehouse/project-c97aea/1/project; refusing to launch a claude worker that would wedge on the trust dialog; inspect window fm-lab-poolchk-75569-15080:w1:p2
+spawn rc=1
+
+######## SCENARIO B: fixed fm-spawn from a LOCAL SECONDMATE home
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/mate-home
+spawned mate-live-fix-s2 harness=claude kind=scout window=fm-lab-poolchk-75569-15080:w1:p3 worktree=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/mate-home/state/treehouse/.treehouse/project-c97aea/1/project
+spawn rc=0
+meta worktree=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/mate-home/state/treehouse/.treehouse/project-c97aea/1/project
+slot git-common-dir:       /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/mate-home/projects/project/.git
+home clone git-common-dir: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/mate-home/projects/project/.git
+-- typed pool command in the worker pane:
+
+######## SCENARIO C: fixed fm-spawn from the ROOT home
+fm-gate-refuse: gate agent lifecycle permitted only against lab home /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/main-home
+spawned main-live-fix-s3 harness=claude kind=scout window=fm-lab-poolchk-75569-15080:w1:p4 worktree=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/th-default/.treehouse/project-c97aea/2/project
+spawn rc=0
+meta worktree=/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/th-default/.treehouse/project-c97aea/2/project
+slot git-common-dir:       /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/main-home/projects/project/.git
+home clone git-common-dir: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/main-home/projects/project/.git
+-- typed pool command in the worker pane:
+
+== secondmate home-scoped pool: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.LoT5Sh/mate-home/state/treehouse/.treehouse/project-c97aea/
+== root home has a home-scoped pool dir: absent
+teardown rc=0
+== lab removed: yes

@@ -1,0 +1,28 @@
++(eval):5> git init -q --bare origin.git
++(eval):6> git clone -q origin.git seed
++(eval):6> cd seed
++(eval):6> git commit -q --allow-empty -m init
++(eval):6> git push -q origin HEAD:main
++(eval):7> git -C origin.git symbolic-ref HEAD refs/heads/main
++(eval):8> git clone -q file://$W/origin.git main-home/projects/project
++(eval):9> git clone -q file://$W/origin.git mate-home/projects/project
++(eval):10> export TREEHOUSE_ROOT=$W/default-root
++(eval):11> A=+(eval):11> cd main-home/projects/project
++(eval):11> treehouse get --lease --no-fetch
++(eval):11> A=$W/default-root/.treehouse/project-12e5b1/1/project 
++(eval):12> B=+(eval):12> cd mate-home/projects/project
++(eval):12> treehouse get --lease --no-fetch
++(eval):12> B=$W/default-root/.treehouse/project-12e5b1/2/project 
++(eval):13> C=+(eval):13> cd mate-home/projects/project
++(eval):13> treehouse --root $W/mate-home/state/treehouse get --lease --no-fetch
++(eval):13> C=$W/mate-home/state/treehouse/.treehouse/project-12e5b1/1/project 
++(eval):14> set +x
+slot=$W/default-root/.treehouse/project-12e5b1/1/project common_dir=/private$W/main-home/projects/project/.git
+slot=$W/default-root/.treehouse/project-12e5b1/2/project common_dir=/private$W/mate-home/projects/project/.git
+slot=$W/mate-home/state/treehouse/.treehouse/project-12e5b1/1/project common_dir=/private$W/mate-home/projects/project/.git
+mate clone common dir: /private$W/mate-home/projects/project/.git
+## return main-clone slot 1 to the shared default pool, then the mate clone acquires from default
+return exit=0
+default-pool slot for mate=$W/default-root/.treehouse/project-12e5b1/1/project common_dir=/private$W/main-home/projects/project/.git
+## same mate clone with --root under its own state
+rooted slot for mate=$W/mate-home/state/treehouse/.treehouse/project-12e5b1/2/project common_dir=/private$W/mate-home/projects/project/.git

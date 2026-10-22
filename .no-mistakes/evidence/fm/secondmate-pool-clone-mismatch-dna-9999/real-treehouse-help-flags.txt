@@ -1,0 +1,3 @@
+Pass --lease for a non-interactive, durable acquire: treehouse reserves the
+      --lease                 Durably lease a worktree without opening a subshell; print only its path to stdout
+      --root string   Worktree root directory, overriding TREEHOUSE_ROOT and config; relative paths (e.g. "." for an in-project pool) resolve from the repo root

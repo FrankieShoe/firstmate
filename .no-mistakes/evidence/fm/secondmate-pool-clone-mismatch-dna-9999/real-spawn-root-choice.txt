@@ -1,0 +1,3 @@
+main-home -> rc=0
+mate-home -> $W/mate-home/state/treehouse rc=0
+remote-home -> rc=0

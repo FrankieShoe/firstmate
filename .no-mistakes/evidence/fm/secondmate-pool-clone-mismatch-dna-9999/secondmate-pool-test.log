@@ -1,0 +1,5 @@
+ok - a local secondmate spawn takes its slot from a pool of its own clone
+ok - a root-home spawn keeps Treehouse's default pool
+ok - a remote-seeded home keeps the default pool and the worktree-of-project check stays intact
+# all fm-spawn-secondmate-pool tests passed
+exit=0
