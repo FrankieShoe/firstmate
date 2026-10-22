@@ -686,7 +686,7 @@ The file and every listed executable must be regular files owned by the watcher'
 
 ### When a guard defers an alarm
 
-Only at the wedge threshold, after the declared-wait, worktree-write, and dead-endpoint checks have all let the escalation through, the watcher runs each guard as `<guard> --json` with `FM_GUARD_TASK` and `FM_GUARD_ENDPOINT` set, bounded by `FM_WEDGE_GUARD_TIMEOUT_SECS`.
+Only at the wedge threshold, after the declared-wait, worktree-write, dead-endpoint, and validating-run checks have all let the escalation through, the watcher runs each guard as `<guard> --json` with `FM_GUARD_TASK` and `FM_GUARD_ENDPOINT` set, bounded by `FM_WEDGE_GUARD_TIMEOUT_SECS`.
 The first guard that prints one JSON object with `status` `CRITICAL` and a non-empty `recommendation` defers that escalation by one window, without advancing the escalation count.
 After `FM_WEDGE_GUARD_DEFER_MAX` consecutive deferrals the escalation fires anyway, and its reason names the guard and the first line of its recommendation.
 A timeout, non-zero exit, malformed output, `OK`, `WARNING`, or `UNKNOWN` changes nothing, and a dead or missing endpoint is reported before any guard is asked.
