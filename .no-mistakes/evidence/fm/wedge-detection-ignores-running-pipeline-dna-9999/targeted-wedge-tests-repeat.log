@@ -1,0 +1,7 @@
+== run 1
+ok - a running or fixing validation run is deferred on the long recheck cadence rather than wedge-escalated
+ok - parked, terminal, ci-monitoring, coarse, runless, absent and unreadable runs keep the unchanged wedge ladder
+ok - with config/wedge-defer-parked-gate absent a parked gate keeps the unchanged ladder, wording and reads
+== run 2
+== run 3
+== run 4

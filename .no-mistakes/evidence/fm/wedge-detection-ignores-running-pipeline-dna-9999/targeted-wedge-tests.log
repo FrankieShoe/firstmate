@@ -1,0 +1,4 @@
+ok - a running or fixing validation run is deferred on the long recheck cadence rather than wedge-escalated
+not ok - a failed run did not reach escalation 3: stale: test:fm-wedge (idle 2s, possible wedge, escalation 1)
+stale: test:fm-wedge (idle 2s, possible wedge, escalation 2)
+signal: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-watch-triage-tests.E0lBs8/not-executing-failed/state/wedge.status
