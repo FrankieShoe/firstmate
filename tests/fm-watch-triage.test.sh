@@ -3615,11 +3615,9 @@ working: still parked at that gate'
 # otherwise defers - human-owed gate, open decision keyed to that run, every
 # signal the armed cases assert on - must escalate on the unchanged schedule
 # with the unchanged reason and demand-deep-inspection wording, and the evidence
-# arm must not even be reached: no current-state read is spent on it and no
-# recheck throttle is written. The validating-run consult still spends its one
-# read per threshold whatever the flag says, so the count below is that one read
-# alone. The fixture is byte-identical to the armed case above except for the
-# flag, so the difference is attributable to the flag alone.
+# arm must not even be reached: no current-state read is spent and no recheck
+# throttle is written. The fixture is byte-identical to the armed case above
+# except for the flag, so the difference is attributable to the flag alone.
 test_wedge_threshold_parked_gate_is_off_until_armed() {
   local dir state fakebin out capture window key n unarmed_probes armed_probes
   local human='state: parked · source: run-step · parked at awaiting_approval: 2 finding(s) · ask-user: authority decision · run: 01RUNGATE'
@@ -3651,14 +3649,13 @@ working: still parked at that gate'
   unarmed_probes=$(wc -l < "$FM_FAKE_CREW_STATE_LOG" | tr -d ' ')
   unset FM_FAKE_CREW_STATE_LOG
 
-  [ "$unarmed_probes" -eq 3 ] \
-    || fail "an unarmed home spent $unarmed_probes current-state read(s) over three thresholds, not only the validating-run consult's one each"
+  [ "$unarmed_probes" -eq 0 ] \
+    || fail "an unarmed home spent $unarmed_probes current-state read(s) on a parked gate over three thresholds"
 
   # The same fixture with only the flag added, counted the same way, so the
-  # count above is the flag's doing rather than a fixture that could never have
+  # zero above is the flag's doing rather than a fixture that could never have
   # reached the reader: one armed threshold must spend a read. A guard placed
-  # after the consult instead of before it would add the arm's read to every
-  # unarmed threshold on top of the validating-run consult's.
+  # after the consult instead of before it would make both counts nonzero.
   dir=$(wedge_threshold_fixture parked-gate-armed-probe-count "$escalated" 2000)
   arm_parked_gate "$dir"
   state="$dir/state"; fakebin="$dir/fakebin"; out="$dir/watch.out"; capture="$dir/pane.txt"
@@ -3944,9 +3941,14 @@ test_wedge_defer_refuses_a_half_filled_wait_record() {
 # --- an executing no-mistakes run is liveness, not a wedge candidate ---------
 # While the pipeline runs or fixes a round the worker is idle behind its own
 # blocking drive call, so a static pane is exactly what a healthy lane looks
-# like. The attributed run step says so, and the wedge timer defers to it on the
-# same long recheck cadence as every other deferral instead of re-escalating a
-# possible wedge each FM_STALE_ESCALATE_SECS.
+# like. The attributed run step says so, and in a home that armed
+# config/wedge-defer-validating the wedge timer defers to it on the same long
+# recheck cadence as every other deferral instead of re-escalating a possible
+# wedge each FM_STALE_ESCALATE_SECS.
+arm_validating() {  # <case-dir>
+  : > "$1/config/wedge-defer-validating"
+}
+
 test_wedge_threshold_defers_to_an_executing_validation_run() {
   local dir state fakebin out capture window key n verdict step queued
   window="test:fm-wedge"; key=$(printf '%s' "$window" | tr ':/.' '___')
@@ -3954,6 +3956,7 @@ test_wedge_threshold_defers_to_an_executing_validation_run() {
   for step in running fixing; do
     verdict="state: working · source: run-step · validating ($step) · run: 01RUNLIVE"
     dir=$(wedge_threshold_fixture "validating-$step" 'working: handed to validation' 0)
+    arm_validating "$dir"
     state="$dir/state"; fakebin="$dir/fakebin"; out="$dir/watch.out"; capture="$dir/pane.txt"
     n=1
     while [ "$n" -le 3 ]; do
@@ -3978,6 +3981,7 @@ test_wedge_threshold_defers_to_an_executing_validation_run() {
   # rather than a timer repair, which would restart the chain under test.
   verdict='state: working · source: run-step · validating (running) · run: 01RUNLIVE'
   dir=$(wedge_threshold_fixture validating-aged 'working: handed to validation' 0 5)
+  arm_validating "$dir"
   state="$dir/state"; fakebin="$dir/fakebin"; out="$dir/watch.out"; capture="$dir/pane.txt"
   printf '01RUNLIVE' > "$state/.validating-since-$key"
   set_mtime "$(( $(date +%s) - 2000 ))" "$state/.validating-since-$key"
@@ -3999,6 +4003,7 @@ test_wedge_threshold_defers_to_an_executing_validation_run() {
   # A replacement run starts its own chain, so an old run's age cannot make the
   # new one re-surface at once.
   dir=$(wedge_threshold_fixture validating-new-run 'working: handed to validation' 0 5)
+  arm_validating "$dir"
   state="$dir/state"; fakebin="$dir/fakebin"; out="$dir/watch.out"; capture="$dir/pane.txt"
   printf '01RUNOLD' > "$state/.validating-since-$key"
   set_mtime "$(( $(date +%s) - 2000 ))" "$state/.validating-since-$key"
@@ -4010,8 +4015,9 @@ test_wedge_threshold_defers_to_an_executing_validation_run() {
 }
 
 # Every run state that does not prove a round is executing keeps the unchanged
-# ladder: a parked gate, a terminal run, a ci monitor, a coarse ledger row, a
-# verdict naming no run, no run at all, and an unreadable verdict.
+# ladder even where the flag is armed: a parked gate, a terminal run, a ci
+# monitor, a coarse ledger row, a verdict naming no run, no run at all, and an
+# unreadable verdict.
 test_wedge_threshold_escalates_when_no_run_is_executing() {
   local dir state fakebin out capture window key n spec name verdict
   window="test:fm-wedge"; key=$(printf '%s' "$window" | tr ':/.' '___')
@@ -4026,6 +4032,7 @@ test_wedge_threshold_escalates_when_no_run_is_executing() {
     'unreadable|error: no-mistakes status timed out'; do
     name=${spec%%|*}; verdict=${spec#*|}
     dir=$(wedge_threshold_fixture "not-executing-$name" 'working: handed to validation' 0)
+    arm_validating "$dir"
     state="$dir/state"; fakebin="$dir/fakebin"; out="$dir/watch.out"; capture="$dir/pane.txt"
     n=1
     while [ "$n" -le 3 ]; do
@@ -4042,6 +4049,39 @@ test_wedge_threshold_escalates_when_no_run_is_executing() {
       || fail "a $name run started a validating deferral chain"
   done
   pass "parked, terminal, ci-monitoring, coarse, runless, absent and unreadable runs keep the unchanged wedge ladder"
+}
+
+# Absent config/wedge-defer-validating an executing run is no deferral at all:
+# the lane escalates on the unchanged schedule and wording, and the consult is
+# never reached, so no current-state read is spent and no chain is started.
+test_wedge_threshold_validating_run_is_off_until_armed() {
+  local dir state fakebin out capture window key n probes
+  local verdict='state: working · source: run-step · validating (running) · run: 01RUNLIVE'
+  window="test:fm-wedge"; key=$(printf '%s' "$window" | tr ':/.' '___')
+  dir=$(wedge_threshold_fixture validating-unarmed 'working: handed to validation' 0)
+  state="$dir/state"; fakebin="$dir/fakebin"; out="$dir/watch.out"; capture="$dir/pane.txt"
+  [ ! -e "$dir/config/wedge-defer-validating" ] \
+    || fail "the unarmed fixture armed the flag, so it proves nothing"
+  export FM_FAKE_CREW_STATE_LOG="$dir/crew-state.calls"
+  : > "$FM_FAKE_CREW_STATE_LOG"
+  n=1
+  while [ "$n" -le 3 ]; do
+    wedge_threshold_round "$state" "$fakebin" "$out" "$capture" "$window" "$verdict" exit \
+      || fail "an unarmed home stopped escalating a running validation at threshold $n: $(cat "$out")"
+    ack_stopped_cycle "$state" || fail "could not acknowledge unarmed validating escalation $n"
+    grep -F "possible wedge, escalation $n" "$out" >/dev/null \
+      || fail "an unarmed home did not reach escalation $n: $(cat "$out")"
+    n=$((n + 1))
+  done
+  probes=$(wc -l < "$FM_FAKE_CREW_STATE_LOG" | tr -d ' ')
+  unset FM_FAKE_CREW_STATE_LOG
+  grep -F 'demand-deep-inspection: same pane has wedge-escalated 3 times in a row' "$out" >/dev/null \
+    || fail "an unarmed home lost the demand-deep-inspection wording: $(cat "$out")"
+  [ "$probes" -eq 0 ] \
+    || fail "an unarmed home spent $probes current-state read(s) on a running validation over three thresholds"
+  [ ! -e "$state/.validating-since-$key" ] \
+    || fail "an unarmed home started a validating deferral chain"
+  pass "with config/wedge-defer-validating absent a running validation keeps the unchanged ladder, wording and reads"
 }
 
 
@@ -7386,6 +7426,7 @@ test_wedge_threshold_worker_wait_is_off_until_armed
 test_wedge_defer_refuses_a_half_filled_wait_record
 test_wedge_threshold_defers_to_an_executing_validation_run
 test_wedge_threshold_escalates_when_no_run_is_executing
+test_wedge_threshold_validating_run_is_off_until_armed
 test_open_captain_call_bounds_stale_churn
 test_stale_churn_without_a_captain_call_still_alarms
 test_failed_wake_append_does_not_arm_the_captain_hold_throttle

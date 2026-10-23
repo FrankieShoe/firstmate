@@ -71,13 +71,14 @@
 #                          the run step cannot show; that deferral still
 #                          re-surfaces once per PAUSE_RESURFACE_SECS, and a pane
 #                          that writes nothing keeps the unchanged schedule.
-#                          A pane whose crew's attributed no-mistakes run is
+#                          Where config/wedge-defer-validating arms it, a
+#                          pane whose crew's attributed no-mistakes run is
 #                          running or fixing is not a wedge candidate: the
 #                          worker is idle behind its own drive call, so it is
 #                          deferred to the same long recheck cadence
 #                          (wedge_defer_validating), while a parked, terminal,
-#                          ci-monitoring, absent or unreadable run escalates
-#                          unchanged.
+#                          ci-monitoring, absent or unreadable run, or a home
+#                          without that flag, escalates unchanged.
 #                          A pane whose recorded endpoint holds no agent at all is
 #                          not a wedge and is reported ONCE instead of escalating
 #                          on that cadence forever (wedge_dead_record); only the
@@ -1752,8 +1753,11 @@ clear_write_tracking() {  # <window-key>
 # with nothing executing it still re-surfaces once every PAUSE_RESURFACE_SECS
 # through resurface_absorbed. A different run id starts a new chain.
 # The escalation counter is left alone, as the other deferrals leave it.
+# OFF unless the home creates config/wedge-defer-validating: absent the flag the
+# crew state is never read here and the ladder is byte-identical.
 wedge_defer_validating() {  # <window> <since-file> <triage-label> <idle-age> <task>
   local win=$1 since_file=$2 label=$3 age=$4 task=$5 verdict run step key vsf vage
+  [ -e "$CONFIG/wedge-defer-validating" ] || return 1
   verdict=$(crew_run_is_validating "$task") || return 1
   run=${verdict%% *}; step=${verdict#* }
   key=$(window_key "$win")
@@ -1960,7 +1964,7 @@ wedge_defer_guard() {  # <window> <since-file> <triage-label> <idle-age> <guard-
 # where it still consults that probe before returning rather than short-circuiting
 # ahead of it, and behind the same gate - nothing escalates after it either, so
 # there too the probe's own re-arm of the shared idle timer is what paces it.
-# The validating-run consult (wedge_defer_validating) runs after those three,
+# The opt-in validating-run consult (wedge_defer_validating) runs after those three,
 # so an endpoint with no agent left in it is still reported once even while its
 # run executes; its crew-state read keeps the same one-per-threshold bound
 # because its deferral restarts the idle timer. The opt-in operator guard
