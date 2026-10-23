@@ -1,0 +1,83 @@
+# Herdr lab fm-lab-wedgeval-80184-7902, lab home /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.MK0YLr, real idle claude panes, real bin/fm-watch.sh + real bin/fm-crew-state.sh
+# FM_STALE_ESCALATE_SECS=20 FM_PAUSE_RESURFACE_SECS=150 FM_POLL=3
+
+## real crew-state verdicts
+wlive (checkout on this branch; live run): state: working · source: run-step · validating (running) · run: 01M5KDVNNTRNK4NHZM8H70PS34
+wdone (checkout 9; completed run): state: done · source: run-step · run passed: PR state unknown (forge read skipped) · run: 01M5GDNPYJT6Z60YYWKF8B10HA
+
+## 1. flag armed, live validating (running) run
+--- 16:51:52 watcher start (flag: armed; metas: wlive.meta )
+--- 16:52:52 no wake within 60s; watcher stopped
+--- 16:52:52 watcher start (flag: armed; metas: wlive.meta )
+--- 16:53:52 no wake within 60s; watcher stopped
+--- 16:53:52 watcher start (flag: armed; metas: wlive.meta )
+--- 16:54:53 no wake within 60s; watcher stopped
+--- 16:55:33 watcher start (flag: armed; metas: wlive.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p2 (idle 48s, no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running) for 184s, rechecked on a long cadence not a wedge; confirm the run is still progressing)
+--- 16:55:45 watcher exited rc=0 after 12s
+--- 16:55:50 watcher start (flag: armed; metas: wlive.meta )
+--- 16:57:20 no wake within 90s; watcher stopped
+
+## 2. flag absent, same live run (control)
+--- 16:57:32 watcher start (flag: absent; metas: wlive.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p2 (idle 34s, possible wedge, escalation 1)
+--- 16:57:37 watcher exited rc=0 after 5s
+--- 16:57:41 watcher start (flag: absent; metas: wlive.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p2 (idle 24s, possible wedge, escalation 2)
+--- 16:58:10 watcher exited rc=0 after 29s
+--- 16:58:13 watcher start (flag: absent; metas: wlive.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p2 (idle 23s, possible wedge, escalation 3, demand-deep-inspection: same pane has wedge-escalated 3 times in a row - do not re-absorb on the run-step/pane state alone)
+--- 16:58:41 watcher exited rc=0 after 28s
+
+## 3. flag armed, terminal (completed) run
+--- 16:58:56 watcher start (flag: armed; metas: wdone.meta )
+signal: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.MK0YLr/state/wdone.status
+--- 16:59:03 watcher exited rc=0 after 7s
+--- 16:59:08 watcher start (flag: armed; metas: wdone.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p3
+--- 16:59:26 watcher exited rc=0 after 18s
+--- 16:59:31 watcher start (flag: armed; metas: wdone.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p3 (idle 20s, possible wedge, escalation 1)
+--- 16:59:58 watcher exited rc=0 after 27s
+--- 17:00:02 watcher start (flag: armed; metas: wdone.meta )
+signal: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.MK0YLr/state/wdone.status /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.MK0YLr/state/wlive.status
+--- 17:00:09 watcher exited rc=0 after 8s
+--- 17:00:14 watcher start (flag: armed; metas: wdone.meta )
+signal: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.MK0YLr/state/wlive.status
+--- 17:00:19 watcher exited rc=0 after 5s
+--- 17:00:31 watcher start (flag: armed; metas: wdone.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p3 (idle 24s, possible wedge, escalation 2)
+--- 17:01:04 watcher exited rc=0 after 33s
+--- 17:01:10 watcher start (flag: armed; metas: wdone.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p3 (idle 24s, possible wedge, escalation 3, demand-deep-inspection: same pane has wedge-escalated 3 times in a row - do not re-absorb on the run-step/pane state alone)
+--- 17:01:40 watcher exited rc=0 after 30s
+--- 17:01:43 watcher start (flag: armed; metas: wdone.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p3 (idle 24s, possible wedge, escalation 4, demand-deep-inspection: same pane has wedge-escalated 4 times in a row - do not re-absorb on the run-step/pane state alone)
+--- 17:02:14 watcher exited rc=0 after 31s
+--- 17:02:18 watcher start (flag: armed; metas: wdone.meta )
+stale: fm-lab-wedgeval-80184-7902:w1:p3 (idle 24s, possible wedge, escalation 5, demand-deep-inspection: same pane has wedge-escalated 5 times in a row - do not re-absorb on the run-step/pane state alone)
+--- 17:02:47 watcher exited rc=0 after 29s
+
+## watcher triage log
+[2026-10-23T16:52:01+1300] absorbed benign signal: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.MK0YLr/state/wlive.status
+[2026-10-23T16:52:15+1300] absorbed non-terminal stale (provably working): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:52:39+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 21s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:53:03+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 21s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:53:27+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 20s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:53:50+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 20s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:54:18+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 21s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:54:48+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 23s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:56:09+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 24s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:56:34+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 20s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:57:00+1300] absorbed non-terminal stale (no-mistakes run 01M5KDVNNTRNK4NHZM8H70PS34 validating (running), idle 21s): fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:57:43+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:58:15+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-80184-7902:w1:p2
+[2026-10-23T16:59:34+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-80184-7902:w1:p3
+[2026-10-23T17:00:34+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-80184-7902:w1:p3
+[2026-10-23T17:01:13+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-80184-7902:w1:p3
+[2026-10-23T17:01:46+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-80184-7902:w1:p3
+[2026-10-23T17:02:20+1300] absorbed non-terminal stale timer reset: fm-lab-wedgeval-80184-7902:w1:p3
+
+## herdr pane list
+{"pane_id":"w1:p2","agent":"claude","agent_status":"idle","cwd":"/Users/hamishgray/.treehouse/firstmate-7bab20/1/firstmate"}
+{"pane_id":"w1:p3","agent":"claude","agent_status":"idle","cwd":"/Users/hamishgray/.treehouse/firstmate-7bab20/9/firstmate"}
