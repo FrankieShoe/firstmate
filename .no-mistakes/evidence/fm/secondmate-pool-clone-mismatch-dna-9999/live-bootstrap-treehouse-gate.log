@@ -1,0 +1,11 @@
+$ treehouse --version: v2.3.0
+$ treehouse get --help | grep -E -- '--lease|--root'
+Pass --lease for a non-interactive, durable acquire: treehouse reserves the
+      --lease                 Durably lease a worktree without opening a subshell; print only its path to stdout
+      --root string   Worktree root directory, overriding TREEHOUSE_ROOT and config; relative paths (e.g. "." for an in-project pool) resolve from the repo root
+$ FM_HOME=<lab> bin/fm-bootstrap.sh
+exit=0
+(no treehouse MISSING/OUTDATED line: v2.3.0 passes the --lease and --root gate)
+--- full detect output ---
+MISSING: tmux (install: brew install tmux  # or the platform's package manager)
+BOOTSTRAP_INFO: lavish-axi >=0.1.80 enables confirmed board replies; this older compatible version retains the legacy reply path, but upgrade to prevent handing back a board before its reply is accepted

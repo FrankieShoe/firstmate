@@ -1,0 +1,19 @@
+## treehouse: v2.3.0
+## fm_treehouse_spawn_root (real fm-wake-lib, real lab homes)
+root home         -> '' (empty = Treehouse default pool)
+local secondmate  -> '/private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.1Lb9dd/mate-home/state/treehouse'
+## root home grows the shared default pool, then returns the slot (HOME isolated)
+root-home slot: /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.1Lb9dd/userhome/.treehouse/dataform-assertions-01817a/1/dataform-assertions
+
+🌳 Worktree returned to pool.
+## BUG path (pre-fix command 'treehouse get --lease'): secondmate clone, default pool
+slot handed out : /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.1Lb9dd/userhome/.treehouse/dataform-assertions-01817a/1/dataform-assertions
+  slot git common dir : /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.1Lb9dd/main-home/projects/dataform-assertions/.git
+  secondmate clone    : /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.1Lb9dd/mate-home/projects/dataform-assertions/.git
+  root-home clone     : /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.1Lb9dd/main-home/projects/dataform-assertions/.git
+CONTROL: default-pool slot is a worktree of the ROOT HOME's clone -> fm-spawn refuses 'not a worktree of project' (reported bug)
+## FIX path (post-fix command 'treehouse --root <mate>/state/treehouse get --lease')
+slot handed out : /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.1Lb9dd/mate-home/state/treehouse/.treehouse/dataform-assertions-01817a/1/dataform-assertions
+  slot git common dir : /private/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/fm-lab.1Lb9dd/mate-home/projects/dataform-assertions/.git
+RESULT: secondmate slot IS a worktree of its own clone
+RESULT: slot lives under the secondmate's own state/treehouse
