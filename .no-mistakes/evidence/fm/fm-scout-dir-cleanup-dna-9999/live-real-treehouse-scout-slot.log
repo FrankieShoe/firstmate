@@ -1,0 +1,21 @@
+== 1. Incident repro: a returned (unleased) pool slot still holding a scout's .scout/ folder
+leased: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/1/proj
+🌳 Worktree returned to pool.
+warning: remote HEAD refers to nonexistent ref, unable to checkout
+?? .scout/
+-- treehouse status --json:
+[{"name":"1","path":"/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/1/proj","status":"dirty","flavor":"git","lease_id":"","lease_holder":"","leased_at":null,"processes":[]}]
+-- spawn deadline note from real treehouse status:
+[; treehouse skips dirty pool slots, and these hold uncommitted or untracked files: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/1/proj]
+== 2. Scout teardown path: scrub (fm-teardown's teardown_scrub_scratch_copy) then return
+leased: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/2/proj
+warning: remote HEAD refers to nonexistent ref, unable to checkout
+scrub rc=0; .scout exists? no
+porcelain after scrub: []
+🌳 Worktree returned to pool.
+-- treehouse status --json:
+[{"name":"1","path":"/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/1/proj","status":"dirty","flavor":"git","lease_id":"","lease_holder":"","leased_at":null,"processes":[]},{"name":"2","path":"/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/2/proj","status":"available","flavor":"git","lease_id":"","lease_holder":"","leased_at":null,"processes":[]}]
+== 3. Scrub the incident slot; note goes silent and get hands out a slot
+[{"name":"1","path":"/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/1/proj","status":"available","flavor":"git","lease_id":"","lease_holder":"","leased_at":null,"processes":[]},{"name":"2","path":"/var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/2/proj","status":"available","flavor":"git","lease_id":"","lease_holder":"","leased_at":null,"processes":[]}]
+note: []
+next get leased: /var/folders/xy/w31wflt17033lv5p0fnxl7y00000gq/T/tmp.Soq4IxHQXs/pool/.treehouse/proj-b19716/1/proj
